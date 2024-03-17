@@ -4,7 +4,8 @@ typedef struct name_ {
 
 writing a macro to get the offset of the field value of a struct:
 
-#define offsetof(struct_name, fieldname) \ (unassigned int)&((struct_name *)0)->field_name
+#define offsetof(struct_name, fieldname) \ 
+            (unassigned int) & ((struct_name *)0)->field_name
 
 typedef struct emp_ {
     char name[30];          // 30 bytes
@@ -16,15 +17,24 @@ typedef struct emp_ {
 
 emp_t *emp = malloc()
 print_emp_details(&emp->glnode)
-print_emp_details(glthread_node_t *glnode) {
-    // name         *glnode-8-1-8-30
-    // salary       *glnode-8-1-8
-    // designation  *glnode-8-1
-    // id           *glnode-8
+
+printf_emp_details(glthread_node_t *glnode) {
+    // name         *glnode-8-1-8-30    ;   offsetof(emp_t, name)
+    // salary       *glnode-8-1-8       ;   offsetof(emp_t, salary)
+    // designation  *glnode-8-1         ;   offsetof(emp_t, designation)
+    // id           *glnode-8           ;   offsetof(emp_t, id)
+}
+
+print_emp_db(glthread_node_t *head) {
+    emp_t *data = NULL;
+    while head
+        data = (emp_t*)((char*)head - offsetof(emp_t, glnode))
+        printf_emp_details(data);
+        head = head->right;
 }
 
 // so creating an object that has a glnode struct to be able to "stick" to the glthread Doubly Linked List
 
 glthread_add(glthread_t *list, glthread_node_t *node) {
-    
+
 }

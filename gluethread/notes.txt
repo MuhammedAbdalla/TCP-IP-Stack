@@ -38,3 +38,72 @@ print_emp_db(glthread_node_t *head) {
 glthread_add(glthread_t *list, glthread_node_t *node) {
 
 }
+
+
+
+Librarys from scratch
+Compiled object files (.o)
+
+Static Libraries     .a
+Dynamic Libraries   .so
+
+// create obj files
+main.o: gcc -c main.c -o main.o
+util.o: gcc -c util.c -o util.o
+
+// bundle into Static Library
+libutil.a: ar rs libutil main.o util.o
+
+//create obj files
+main.o: gcc -c -fPIC main.c -o main.o
+util.o: gcc -c -fPIC util.c -o util.o
+
+// bundle into Dynamic Library
+libutil.so: gcc main.o util.o -shared -o libutil.so
+
+// Static Library Linking
+libutil.a + app.c -> exe
+1. Compile app: gcc -c app.c -o app.o
+2. Linking: gcc app.o - exe -L. -lutil
+3. Run exe: ./exe
+
+// Dynamic Library Linking
+libutil.so + app.c -> exe
+1. compile app: gcc -c app.c -o app.o
+2. move .so into /usr/lib: mv libutil.so /usr/lib or /usr/local/lib
+3. run ldconfig: run 'sudo ldconfig'
+4. link app & library: gcc app.o - exe -lutil
+3. run app: ./exe
+
+
+// Pre-processing directives
+// duplicate headers
+using #ifndef
+#ifndef __A__
+#define __A__
+content in here
+#endof
+
+// recursive dependency
+pointer usage vs complete usage
+
+// foward declaration
+struct occ_t;
+
+struct emp_t {
+    char name[32];          32 bytes     
+    unsigned int emp_id;    4 bytes
+    designation_t des;      20 bytes complete usage
+    occ_t *occ;             4 bytes pointer usage because struct defined after
+}
+
+struct occ_t {
+    char name[32];
+    unsigned in emp_id;
+    struct emp_t emp_t;
+}
+
+
+
+
+

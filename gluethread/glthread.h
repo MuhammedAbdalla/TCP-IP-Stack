@@ -16,7 +16,7 @@
 #define ITERATE_GLTHREADS_ENDS }}
 
 /* macro for init glnode*/
-#define gltrhead_node_init(glnodes) \
+#define glthread_node_init(glnode)  \
     glnode->left = NULL;            \
     glnode->right = NULL;           \
 
@@ -24,9 +24,14 @@
 #define offsetof(struct_name, field_name)   \
     ((unsigned int)&((struct_name *)0)->field_name)
 
+typedef enum {
+    glFALSE,
+    glTRUE
+} glthread_init;
+
 typedef struct glthread_node_ {
     struct glthread_node_ *left;
-    struct glthread_node *right;
+    struct glthread_node_ *right;
 } glthread_node_t;
 
 typedef struct glthread_ {

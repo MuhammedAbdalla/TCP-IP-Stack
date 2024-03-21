@@ -10,36 +10,38 @@
 #define ITERATE_GLTHREADS_BEGIN(lstptr, struct_type, ptr)       \
 {                                                               \
     glthread_node_t *_glnode = NULL, *_next = NULL;             \
-    for (_glnode = lsptr->head; _glnode; _glnode =_next) {      \
+    for (_glnode = lstptr->head; _glnode; _glnode =_next) {     \
         _next = _glnode->right;                                 \
-        ptr = (struct_type*((char *)_glnode - lstprtr->offset))
+        ptr = (struct_type*)((char *)_glnode - lstptr->offset);
+
 #define ITERATE_GLTHREADS_ENDS }}
 
 /* macro for init glnode*/
 #define glthread_node_init(glnode)  \
     glnode->left = NULL;            \
-    glnode->right = NULL;           \
+    glnode->right = NULL;           
 
 /* macro for field name offset in any struct*/
-#define offsetof(struct_name, field_name)   \
-    ((unsigned int)&((struct_name *)0)->field_name)
+#define offsetof(TYPE, FIELD)   \
+    ((size_t)&((TYPE *)0)->FIELD)
+
+typedef struct glthread_node_ glthread_node_t;
+typedef struct glthread_ glthread_t;
 
 typedef enum {
     glFALSE,
     glTRUE
 } glthread_init;
 
-typedef struct glthread_node_ {
-    struct glthread_node_ *left;
-    struct glthread_node_ *right;
-} glthread_node_t;
+struct glthread_node_ {
+    glthread_node_t *left;
+    glthread_node_t *right;
+};
 
-typedef struct glthread_ {
+struct glthread_ {
     glthread_node_t *head;
-    // int (*key_match)(void*, void*);
-    // int (*comparison_fn)(void*, void*);
     unsigned int offset;
-} glthread_t;
+};
 
 void glthread_add (glthread_t *lst, glthread_node_t *glnode);
 

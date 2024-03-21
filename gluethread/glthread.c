@@ -19,6 +19,7 @@ static void _glthread_add_next(glthread_node_t *curr_node, glthread_node_t *new_
     glthread_node_t *temp = curr_node->right;
     curr_node->right = new_node;
     new_node->left = curr_node;
+    new_node->right = temp;
     temp->left = new_node;
 }
 /*
@@ -26,8 +27,7 @@ static void _glthread_add_next(glthread_node_t *curr_node, glthread_node_t *new_
     new node becomes the head of the list
 */
 void glthread_add(glthread_t *lst, glthread_node_t *glnode) {
-    glnode->left = NULL;
-    glnode->right = NULL;
+    glthread_node_init(glnode);
 
     // if list has no head, then insert glnode as head
     if (!lst->head) {
@@ -71,7 +71,8 @@ void gltrhead_remove(glthread_t *lst, glthread_node_t *glnode) {
 }
 
 void init_glthread(glthread_t *glthread, unsigned int offset) {
-    if (glthread->head == NULL) {
+    if (!glthread) {
          glthread_node_init(glthread->head);
     }
+    glthread->offset = offset;
 }

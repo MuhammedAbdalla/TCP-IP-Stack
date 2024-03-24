@@ -5,6 +5,9 @@
 #ifndef __NET__
 #define __NET__
 
+#include "graph/graph.h"
+#include <memory.h>
+
 // GET macros
 #define INTF_MAC(intf_ptr) ((intf_ptr)->intf_nw_prop.mac_addr.mac)
 #define INTF_IP(intf_ptr) ((intf_ptr)->intf_nw_prop.ip_addr.ip)
@@ -41,9 +44,6 @@ struct intf_nw_prop_ {
     ip_addr_t ip_addr;
     char mask;
 };
-
-#include "graph/graph.h"
-#include <memory.h>
 
 static inline void init_node_nw_prop(node_nw_prop_t *node_nw_prop) {
     node_nw_prop->is_lb_addr_config = 0;

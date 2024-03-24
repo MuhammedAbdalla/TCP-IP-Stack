@@ -2,7 +2,7 @@
     net.c
 */
 
-#include "net.h"
+#include "graph/graph.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>

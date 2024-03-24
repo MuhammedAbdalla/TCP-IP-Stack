@@ -39,7 +39,7 @@ build: test_graph.exe test_glthread.exe
 OBJS=objs/glthread.o objs/net.o objs/graph.o
 
 ## compile with the c src and test files in exe compile step
-test_graph.exe: objs/glthread.o objs/graph.o objs/test_graph.o objs/net.o
+test_graph.exe: objs/glthread.o objs/net.o objs/graph.o objs/test_graph.o
 	$(CC) $(CFLAGS) $^ -o $@
 
 test_glthread.exe: objs/glthread.o objs/test_glthread.o

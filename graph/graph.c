@@ -3,7 +3,6 @@
 */
 
 #include "graph.h"
-#include "net/net.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -64,28 +63,33 @@ void insert_link_between_two_nodes(node_t *node1, node_t *node2, char *from_if_n
     init_intf_nw_prop(&node2->intf[empty_intf_slot]->intf_nw_prop);
 
     // assign mac address to interfaces
-    interface_assign_mac_addr(&node1->intf[empty_intf_slot]->intf_nw_prop);
-    interface_assign_mac_addr(&node2->intf[empty_intf_slot]->intf_nw_prop);
+    interface_assign_mac_addr(node1->intf[empty_intf_slot]);
+    interface_assign_mac_addr(node2->intf[empty_intf_slot]);
 }
 
 void print_interface_details(interface_t *interface[]) {
     for (int i = 0; i < MAX_INTF_PER_NODE; i++) {
         if (interface[i]) {
-            printf("\t%s", (interface[i])->if_name);
+            printf(" interface = %s\n", (interface[i])->if_name);
+            printf("\tlocal node : %s", (interface[i])->link->intf1.att_node->node_name);
+            printf("\tNeighbor   : %s", (interface[i])->link->intf2.att_node->node_name);
+            printf("\n");
+            printf("\tIP Addr    : %s", (interface[i])->intf_nw_prop.ip_addr.ip);
+            printf("\tMAC Addr   : %s", (interface[i])->intf_nw_prop.mac_addr.mac);
+            printf("\n");
         }
     }
 }
 
 void print_node_details(node_t *node) {
-    printf("node      \t%s\n", node->node_name);
-	printf(":interface");
+    printf("node = %s\n", node->node_name);
     print_interface_details(node->intf);
 }
 
 void dump_graph(graph_t *graph) {
     node_t *ptr = NULL;
 
-    printf("Graph: %s\n", graph->topology_name);
+    printf("\nNetwork Topology\t%s\n", graph->topology_name);
 
     // if (!graph->node_list) return;
 

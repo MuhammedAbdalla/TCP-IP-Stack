@@ -6,11 +6,6 @@
 #ifndef __GRAPH__
 #define __GRAPH__
 
-#include "gluethread/glthread.h"
-#include "net/net.h"
-#include <stdlib.h>
-#include <string.h>
-
 #define NODE_NAME_SIZE 16
 #define IF_NAME_SIZE 16
 #define MAX_INTF_PER_NODE 10
@@ -20,6 +15,11 @@ typedef struct node_ node_t;
 typedef struct link_ link_t;
 typedef struct interface_ interface_t;
 typedef struct graph_ graph_t;
+
+#include "gluethread/glthread.h"
+#include "net/net.h"
+#include <stdlib.h>
+#include <string.h>
 
 struct interface_ {
     char if_name[IF_NAME_SIZE];
@@ -81,7 +81,7 @@ static inline interface_t * get_node_if_by_name(node_t *node, char *if_name) {
 /*
  Write a function in graph.h file which returns pointer node present in a graph list, searched by node name.
 */
-static inline node_t * get_node_by_node_name(graph_t *topo, char *node_name) {
+static inline node_t *get_node_by_node_name(graph_t *topo, char *node_name) {
     if (!topo) return NULL;
     
     node_t *ptr = NULL;

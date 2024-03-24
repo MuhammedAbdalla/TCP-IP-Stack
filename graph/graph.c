@@ -9,20 +9,26 @@
 
 graph_t *create_new_graph(char *topology_name) {
     graph_t *graph = calloc(1, sizeof(graph_t));
-    strncpy(graph->topology_name, topology_name, 32);
-    graph->topology_name[32] = '\0';
+    graph->node_list = calloc(1, sizeof(glthread_t));
 
-    init_glthread(&graph->node_list, 0);
+    strncpy(graph->topology_name, topology_name, 32);
+    graph->topology_name[31] = '\0';
+    
+    init_glthread(graph->node_list, offsetof(node_t, graph_glue));
+
+    printf("Created Graph: %s\n", graph->topology_name);
     return graph;
 }
 
 node_t *create_graph_node(graph_t *graph, char *node_name) {
     node_t *node = calloc(1, sizeof(node_t));
     strncpy(node->node_name, node_name, NODE_NAME_SIZE);
-    node->node_name[NODE_NAME_SIZE] = '\0';
+    node->node_name[NODE_NAME_SIZE-1] = '\0';
 
-    glthread_add(&graph->node_list, &node->graph_glue);
+    glthread_node_init((&node->graph_glue));
 
+    glthread_add(graph->node_list, &node->graph_glue);
+    printf("adding node %s to Graph: %s\n", node->node_name, graph->topology_name);
     return node;
 }
 
@@ -31,9 +37,9 @@ void insert_link_between_two_nodes(node_t *node1, node_t *node2, char *from_if_n
 
     /* interface properties */
     strncpy(link->intf1.if_name, from_if_name, IF_NAME_SIZE);
-    link->intf1.if_name[IF_NAME_SIZE] = '\0';
+    link->intf1.if_name[IF_NAME_SIZE-1] = '\0';
     strncpy(link->intf2.if_name, to_if_name, IF_NAME_SIZE);
-    link->intf2.if_name[IF_NAME_SIZE] = '\0';
+    link->intf2.if_name[IF_NAME_SIZE-1] = '\0';
 
     /* set back pointers */
     link->intf1.link = link;
@@ -48,32 +54,32 @@ void insert_link_between_two_nodes(node_t *node1, node_t *node2, char *from_if_n
     node1->intf[empty_intf_slot] = &link->intf1;
 
     empty_intf_slot = get_node_intf_available_slot(node2);
-    node1->intf[empty_intf_slot] = &link->intf2;
+    node2->intf[empty_intf_slot] = &link->intf2;
 }
 
 void print_interface_details(interface_t *interface[]) {
     for (int i = 0; i < MAX_INTF_PER_NODE; i++) {
-        printf("\t%s", (interface[i])->if_name);
+        if (interface[i]) {
+            printf("\t%s", (interface[i])->if_name);
+        }
     }
 }
 
 void print_node_details(node_t *node) {
-    printf("node\t\t%s\n", node->node_name);
-	printf("interface\t");
+    printf("node      \t%s\n", node->node_name);
+	printf(":interface");
     print_interface_details(node->intf);
 }
 
 void dump_graph(graph_t *graph) {
-    node_t *data = NULL;
-    glthread_node_t *head = graph->node_list.head;
+    node_t *ptr = NULL;
 
-    printf("Graph: %s",graph->topology_name);
+    printf("Graph: %s\n", graph->topology_name);
 
-    if (!head) return;
+    // if (!graph->node_list) return;
 
-    while (head) {
-        data = (node_t*)((char*)head - offsetof(node_t, graph_glue));
-        print_node_details(data);
-        head = head->right;
-    }
+    ITERATE_GLTHREADS_BEGIN(graph->node_list, node_t, ptr){
+        print_node_details(ptr);
+        printf("\n");
+    } ITERATE_GLTHREADS_ENDS;
 }

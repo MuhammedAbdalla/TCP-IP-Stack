@@ -42,7 +42,7 @@ struct node_
 struct graph_ {
     /* data */
     char topology_name[32];
-    glthread_t node_list;
+    glthread_t *node_list;
 };
 
 static inline node_t *get_nbr_node(interface_t *interface) {

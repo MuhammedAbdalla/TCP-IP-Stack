@@ -36,10 +36,10 @@ CC=gcc
 CFLAGS=-g
 build: test_graph.exe test_glthread.exe
 
-OBJS=objs/glthread.o objs/graph.o
+OBJS=objs/glthread.o objs/net.o objs/graph.o
 
 ## compile with the c src and test files in exe compile step
-test_graph.exe: objs/glthread.o objs/graph.o objs/test_graph.o
+test_graph.exe: objs/glthread.o objs/graph.o objs/test_graph.o objs/net.o
 	$(CC) $(CFLAGS) $^ -o $@
 
 test_glthread.exe: objs/glthread.o objs/test_glthread.o
@@ -57,6 +57,9 @@ objs/glthread.o: gluethread/glthread.c
 	$(CC) $(CFLAGS) -c -I gluethread $^ -o $@
 
 objs/graph.o: graph/graph.c
+	$(CC) $(CFLAGS) -c -I. $^ -o $@
+
+objs/net.o: net/net.c 
 	$(CC) $(CFLAGS) -c -I. $^ -o $@
 
 clean:

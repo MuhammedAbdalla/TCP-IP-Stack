@@ -34,22 +34,34 @@
 
 CC=gcc
 CFLAGS=-g
-build: test_graph.exe test_glthread.exe
+EXE_FOLDER=run
+build: test_glthread.exe test_utils.exe test_graph.exe
 
 OBJS=objs/glthread.o objs/net.o objs/graph.o
 
+## shortcuts
+t_graph: test_graph.exe
+t_glthread: test_glthread.exe
+t_utils: test_utils.exe
+
 ## compile with the c src and test files in exe compile step
 test_graph.exe: objs/glthread.o objs/net.o objs/graph.o objs/test_graph.o
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@
 
 test_glthread.exe: objs/glthread.o objs/test_glthread.o
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@
+
+test_utils.exe: objs/utils.o objs/test_utils.o
+	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@
 
 ## obj test file compile step
 objs/test_graph.o: tests/test_graph.c
 	$(CC) $(CFLAGS) -c $^ -o $@ -I.
 
 objs/test_glthread.o: tests/test_glthread.c
+	$(CC) $(CFLAGS) -c $^ -o $@ -I.
+
+objs/test_utils.o: tests/test_utils.c
 	$(CC) $(CFLAGS) -c $^ -o $@ -I.
 
 ## obj src file compile step
@@ -60,6 +72,9 @@ objs/graph.o: graph/graph.c
 	$(CC) $(CFLAGS) -c -I. $^ -o $@
 
 objs/net.o: net/net.c 
+	$(CC) $(CFLAGS) -c -I. $^ -o $@
+
+objs/utils.o: utils/utils.c
 	$(CC) $(CFLAGS) -c -I. $^ -o $@
 
 clean:

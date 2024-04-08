@@ -64,9 +64,32 @@ void interface_assign_mac_addr(interface_t *interface) {
     hash_val = hash_code(node->node_name, NODE_NAME_SIZE);
     hash_val *= hash_code(interface->if_name, IF_NAME_SIZE);
     memset(INTF_MAC(interface), 0, sizeof(INTF_MAC(interface)));
-    memcpy(INTF_MAC(interface), (char*)&hash_val, sizeof(unsigned int));
+    memcpy(INTF_MAC(interface), (char *)&hash_val, sizeof(unsigned int));
 }
 
-void dump_new_graph(graph_t *graph) {
+void dump_nw_graph(graph_t *graph) {
+    /* for further implementation, exists in graph.c dump_graph()*/
+}
+
+interface_t *node_get_matching_subnet_interface(node_t *node, char *ip_addr) {
+    // making subnet, search for an interface with the same attachment node
+    
+    return NULL;
+}
+
+/*
+Write a function in net.h/net.c which converts an ip address in string form (A.B.C.D format) into its equivalent 32-bit integer form.
+*/
+unsigned int convert_ip_from_str_to_int(char *ip_addr) {
+    return -1;
+}
+
+
+/*
+Write a function in net.h/net.c which converts an ip address in integer form into its equivalent dot decimal form (A.B.C.D format)
+
+Output should be stored in the array output_buffer of size 16 bytes passed as second argument.
+*/
+void convert_ip_from_int_to_str(unsigned int ip_addr, char *output_buffer) {
 
 }

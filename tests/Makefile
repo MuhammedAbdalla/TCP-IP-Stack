@@ -1,17 +1,42 @@
+# compile the test src file and src file into exes
+
 TOPDIR=..
-GLTHREADDIR=$(TOPDIR)/gluethread
-GRAPHDIR=$(TOPDIR)/graph
-TESTDIR=$(TOPDIR)/test
+OBJS_FOLDER=$(TOPDIR)/objs
+EXE_FOLDER=$(TOPDIR)/run
 
-test_graph: print-pwd test_graph.o graph.o
-	gcc -o test_graph test_graph.o graph.o
+CC=gcc
+CFLAGS=-g
 
-print-pwd:
-	@echo "current directory"
-	@pwd
+.PHONY: objs exes
+
+objs: test_glthread.o test_graph.o test_utils.o
+exes: test_glthread.exe test_utils.exe test_graph.exe
+
+## compile with the c src and test files in exe compile step
+test_graph.exe: $(OBJS_FOLDER)/glthread.o $(OBJS_FOLDER)/net.o $(OBJS_FOLDER)/graph.o $(OBJS_FOLDER)/test_graph.o
+	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@
+
+test_glthread.exe: $(OBJS_FOLDER)/glthread.o $(OBJS_FOLDER)/test_glthread.o
+	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@
+
+test_utils.exe: $(OBJS_FOLDER)/utils.o $(OBJS_FOLDER)/test_utils.o
+	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@
+
+
+## obj test file compile step
+test_glthread.o: test_glthread.c
+	$(CC) $(CFLAGS) -c $^ -o $(OBJS_FOLDER)/$@ -I$(TOPDIR)/.
 
 test_graph.o: test_graph.c
-	gcc -c test_graph.c -I$(TOPDIR)
+	$(CC) $(CFLAGS) -c $^ -o $(OBJS_FOLDER)/$@ -I$(TOPDIR)/.
+
+test_utils.o: test_utils.c
+	$(CC) $(CFLAGS) -c $^ -o $(OBJS_FOLDER)/$@ -I$(TOPDIR)/.
+
+
+clean:
+	rm -f *.o
+
 
 
 

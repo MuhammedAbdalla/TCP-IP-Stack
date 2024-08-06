@@ -18,6 +18,7 @@ typedef struct graph_ graph_t;
 
 #include "gluethread/glthread.h"
 #include "net/net.h"
+#include "utils/utils.h"
 #include <stdlib.h>
 #include <string.h>
 

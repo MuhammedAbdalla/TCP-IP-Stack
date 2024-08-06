@@ -41,15 +41,23 @@ Write a below API in utils.c/utils.h which will fill the 6-byte array passed as 
 */
 
 void layer2_fill_with_broadcast_mac(char *mac_array) {
-    memset(mac_array, 1, 17);
-    printf("%s", mac_array);
+    memset(mac_array, 'F', 17);
     for (int i = 0; i < 17; i++) {
         if (((i+1)%3) == 0) {
             // 2 5 8 11 14
             mac_array[i] = ':';
-        } else {
-            // 01 34 67 910 1213 1516
-            mac_array[i] = '1';
+        }
+    }
+    mac_array[17] = '\0';
+}
+
+
+void layer2_format_mac(unsigned int value, char *mac_array) {
+    memset(mac_array, 'F', 17);
+    for (int i = 0; i < 17; i++) {
+        if (((i+1)%3) == 0) {
+            // 2 5 8 11 14
+            mac_array[i] = ':';
         }
     }
     mac_array[17] = '\0';

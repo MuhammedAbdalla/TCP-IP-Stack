@@ -50,21 +50,21 @@ void insert_link_between_two_nodes(node_t *node1, node_t *node2, char *from_if_n
     link->intf2.att_node = node2;
     link->cost = cost;
 
-    int empty_intf_slot;
-    empty_intf_slot = get_node_intf_available_slot(node1);
-    node1->intf[empty_intf_slot] = &link->intf1;
+    int empty_intf_slot1 = 0, empty_intf_slot2 = 0;
+    empty_intf_slot1 = get_node_intf_available_slot(node1);
+    node1->intf[empty_intf_slot1] = &link->intf1;
 
-    empty_intf_slot = get_node_intf_available_slot(node2);
-    node2->intf[empty_intf_slot] = &link->intf2;
+    empty_intf_slot2 = get_node_intf_available_slot(node2);
+    node2->intf[empty_intf_slot2] = &link->intf2;
 
 
     // initialize interface network properties
-    init_intf_nw_prop(&node1->intf[empty_intf_slot]->intf_nw_prop);
-    init_intf_nw_prop(&node2->intf[empty_intf_slot]->intf_nw_prop);
+    init_intf_nw_prop(&node1->intf[empty_intf_slot1]->intf_nw_prop);
+    init_intf_nw_prop(&node2->intf[empty_intf_slot2]->intf_nw_prop);
 
     // assign mac address to interfaces
-    interface_assign_mac_addr(node1->intf[empty_intf_slot]);
-    interface_assign_mac_addr(node2->intf[empty_intf_slot]);
+    interface_assign_mac_addr(node1->intf[empty_intf_slot1]);
+    interface_assign_mac_addr(node2->intf[empty_intf_slot2]);
 }
 
 void print_interface_details(interface_t *interface[]) {

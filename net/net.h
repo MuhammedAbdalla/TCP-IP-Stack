@@ -26,7 +26,7 @@ struct ip_addr_ {
 };
 
 struct mac_addr_ {
-    char mac[48];
+    char mac[18];
 };
 
 struct node_nw_prop_ {

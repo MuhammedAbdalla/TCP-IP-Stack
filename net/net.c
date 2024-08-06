@@ -3,7 +3,9 @@
 */
 
 #include "graph/graph.h"
+#include "utils/utils.h"
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -44,27 +46,59 @@ int node_unset_intf_ip_addr(node_t *node, char *local_intf) {
 // Mac addr = fn(node, interface, some heristics)
 // random num generator
 static unsigned int hash_code(void *ptr, unsigned int size) {
-    unsigned int value = 0, i = 0;
-    char *str = (char*)ptr;
+    unsigned int hash_val = 1;
+    char *str = (char*) ptr;
 
-    while (i < size) {
-        value += *str;
-        value *= 97;
-        str++;
-        i++;
+    for (int i = 0; i < size; i++, str++) {
+        hash_val += *str;
+        hash_val *= 97;
     }
-    return value;
+
+    return hash_val;
 }
+
+static void format_into_mac_addr(char* mac, unsigned int hash_val) {
+    unsigned int mac_val[7];
+    memset(mac_val, 0, 6);
+
+    memset(mac, 0, 17);
+    for (int i = 0; i < 6; i++) {
+        mac_val[i] = (hash_val*((i*8)+1) % 256);
+        printf("%x\t",mac_val[i]);
+    } 
+    printf("\n");
+
+    char buffer[18];
+    memset(buffer, 0, 17);
+
+    for (int i = 0, k = 0; i < 11; i++) {
+        if (((i+1)%2) != 0) {
+            // 0 2 4 6 8 10
+            char hex[3];
+            sprintf(hex,"%02x", mac_val[k]);
+            strcat(buffer, hex);
+            k++;
+        } else {
+            strcat(buffer, ":");
+        }    
+    }
+
+    memcpy(mac, buffer, sizeof(buffer));
+}
+
 void interface_assign_mac_addr(interface_t *interface) {
     node_t *node = interface->att_node;
 
     if (!node) return;
+    printf("%s %s\n", node->node_name, interface->if_name);
 
     unsigned int hash_val = 0;
     hash_val = hash_code(node->node_name, NODE_NAME_SIZE);
     hash_val *= hash_code(interface->if_name, IF_NAME_SIZE);
-    memset(INTF_MAC(interface), 0, sizeof(INTF_MAC(interface)));
-    memcpy(INTF_MAC(interface), (char *)&hash_val, sizeof(unsigned int));
+
+    // printf("%u %s\n", hash_val, (char *)&hash_val);
+
+    format_into_mac_addr(INTF_MAC(interface), hash_val);
 }
 
 void dump_nw_graph(graph_t *graph) {

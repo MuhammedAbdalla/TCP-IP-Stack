@@ -12,6 +12,11 @@ CFLAGS=-g
 objs: test_glthread.o test_graph.o test_utils.o
 exes: test_glthread.exe test_utils.exe test_graph.exe
 
+## shortcuts
+t_graph: test_graph.exe
+t_glthread: test_glthread.exe
+t_utils: test_utils.exe
+
 ## compile with the c src and test files in exe compile step
 test_graph.exe: $(OBJS_FOLDER)/glthread.o $(OBJS_FOLDER)/net.o $(OBJS_FOLDER)/graph.o $(OBJS_FOLDER)/test_graph.o
 	$(CC) $(CFLAGS) $^ -o $(EXE_FOLDER)/$@

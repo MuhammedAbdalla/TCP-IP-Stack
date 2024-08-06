@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#define IS_MAC_BROADCAST_ADDR(mac) (strcmp(mac, "11:11:11:11:11:11"))
+#define IS_MAC_BROADCAST_ADDR(mac) (strcmp(mac, "FF:FF:FF:FF:FF:FF"))
 
 void apply_mask(char *prefix, char mask, char *str_prefix);
 
